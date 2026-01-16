@@ -5,7 +5,7 @@
 }
 
 :root {
-    --primary: #01193b;
+    --primary: #5c5c5c;
     --primary-dark: #4f46e5;
     --secondary: #13cc76;
     --success: #000000;
@@ -1241,5 +1241,6 @@ tr:hover {
     }
 
 }
+
 
 
