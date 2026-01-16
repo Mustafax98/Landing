@@ -5,7 +5,7 @@
 }
 
 :root {
-    --primary: #0d9123;
+    --primary: #82b8e7;
     --primary-dark: #4f46e5;
     --secondary: #13cc76;
     --success: #10b981;
@@ -1239,4 +1239,5 @@ tr:hover {
         padding: 8px 15px;
         font-size: 0.9rem;
     }
+
 }
