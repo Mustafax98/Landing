@@ -11,14 +11,14 @@ let globalData = {
         freeDeliveryLimit: 50
     },
     menuItems: [
-        { id: 1, name: 'سمبوسة لحم', price: 15, description: 'سمبوسة محشوة باللحم المفروم والتوابل', category: 'category1', status: 'active', image: 'samosa', tags: ['حار'] },
-        { id: 2, name: 'تبولة', price: 20, description: 'سلطة تبولة طازجة مع البقدونس والبرغل', category: 'category1', status: 'active', image: 'tabouleh', tags: ['نباتي'] },
-        { id: 3, name: 'مندي دجاج', price: 65, description: 'دجاج مندي مطهو على الطريقة اليمنية الأصيلة', category: 'category2', status: 'active', image: 'mandi', tags: ['الأكثر مبيعاً'] },
-        { id: 4, name: 'كبسة لحم', price: 75, description: 'كبسة لحم ضأن بالبهارات العربية الأصيلة', category: 'category2', status: 'active', image: 'kabsa', tags: ['الأكثر مبيعاً'] },
-        { id: 5, name: 'شيش طاووق', price: 45, description: 'قطع دجاج متبلة مشوية على الفحم', category: 'category3', status: 'active', image: 'shawarma', tags: [] },
-        { id: 6, name: 'مشاوي مختلطة', price: 85, description: 'تشكيلة من المشاوي اللحم والدجاج', category: 'category3', status: 'active', image: 'mixed', tags: ['الأكثر مبيعاً'] },
-        { id: 7, name: 'كنافة بالجبن', price: 25, description: 'كنافة طرية مع الجبن والقطر', category: 'category4', status: 'active', image: 'kunafa', tags: ['الأكثر مبيعاً'] },
-        { id: 8, name: 'عصير مانجو', price: 15, description: 'عصير مانجو طازج', category: 'category4', status: 'active', image: 'mango', tags: ['طازج'] }
+        { id: 1, name: 'منتج 1', price: 15, description: 'منتج 1', category: 'category1', status: 'active', image: 'samosa', tags: ['none'] },
+        { id: 2, name: 'منتج 2', price: 20, description: 'منتج 2', category: 'category1', status: 'active', image: 'tabouleh', tags: ['جديد'] },
+        { id: 3, name: 'منتج 3', price: 65, description: 'منتج 3', category: 'category2', status: 'active', image: 'mandi', tags: ['الأكثر مبيعاً'] },
+        { id: 4, name: 'منتج 4', price: 75, description: 'منتج 4', category: 'category2', status: 'active', image: 'kabsa', tags: ['الأكثر مبيعاً'] },
+        { id: 5, name: 'منتج 5', price: 45, description: 'منتج 5', category: 'category3', status: 'active', image: 'shawarma', tags: ['جديد'] },
+        { id: 6, name: 'منتج 6', price: 85, description: 'منتج 6', category: 'category3', status: 'active', image: 'mixed', tags: ['الأكثر مبيعاً'] },
+        { id: 7, name: 'منتج 7', price: 25, description: 'منتج 7', category: 'category4', status: 'active', image: 'kunafa', tags: ['الأكثر مبيعاً'] },
+        { id: 8, name: 'منتج 8', price: 15, description: 'منتج 8', category: 'category4', status: 'active', image: 'mango', tags: ['جديد'] }
     ],
     branches: [
         { id: 1, name: 'القاهره الجديده - الفرع الرئيسي', address: 'الرحاب حي النخيل', phone: '0112345678', email: 'rehab@merchant.com', hours: '11:00 ص - 12:00 م', status: 'active' },
@@ -595,4 +595,5 @@ window.onclick = function (event) {
         event.target.classList.remove('active');
     }
 }
+
 
