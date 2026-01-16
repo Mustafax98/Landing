@@ -8,7 +8,7 @@
     --primary: #01193b;
     --primary-dark: #4f46e5;
     --secondary: #13cc76;
-    --success: #10b981;
+    --success: #000000;
     --warning: #f59e0b;
     --danger: #ef4444;
     --dark: #1e293b;
@@ -1241,4 +1241,5 @@ tr:hover {
     }
 
 }
+
 
