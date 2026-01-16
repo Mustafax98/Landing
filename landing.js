@@ -5,8 +5,8 @@ let globalData = {
         email: 'info@merchant.com',
         phone: '+20120000123',
         whatsapp: '+201501234567',
-        address: 'طريق الملك فهد، حي النخيل، الرياض',
-        description: ' ( اسم التاجر ) هو وجهتك المفضلة لتجربة أشهى المأكولات الشرقية والغربية في جو عائلي دافئ.',
+        address: 'القاهرهمصر الجديده',
+        description: ' ( اسم التاجر ) كل ما تريد في مكان واحد.',
         deliveryFee: 15,
         freeDeliveryLimit: 50
     },
@@ -595,5 +595,6 @@ window.onclick = function (event) {
         event.target.classList.remove('active');
     }
 }
+
 
 
