@@ -87,7 +87,7 @@ body {
     display: flex;
     align-items: center;
     padding: .5rem .7rem;
-    color: rgb(0, 192, 86);
+    color: #5c5c5c;
     text-decoration: none;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -1241,6 +1241,7 @@ tr:hover {
     }
 
 }
+
 
 
 
