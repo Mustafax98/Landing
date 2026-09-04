@@ -4,690 +4,429 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام ( اسم التاجر ) المتكامل</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="Style.css">
+    <title>Quick-One Piace — توصيل يكبّر بيزنسك</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { cairo: ['Cairo', 'sans-serif'] },
+                    colors: {
+                        primary: { DEFAULT: '#78B145', dark: '#5C8F34', light: '#E4F0D9' },
+                        ink: { DEFAULT: '#2C3E50', soft: '#5C6B7A' },
+                        accent: { DEFAULT: '#F4B41A', dark: '#D89A0E' },
+                        mapbg: '#EAF1E2',
+                    },
+                    boxShadow: {
+                        soft: '0 4px 14px rgba(44,62,80,0.12)',
+                        card: '0 12px 32px rgba(44,62,80,0.16)',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body { font-family: 'Cairo', sans-serif; scroll-behavior: smooth; }
+        * { -webkit-tap-highlight-color: transparent; }
 
+        .word-one { color: #2C3E50; }
+        .word-piace { color: #78B145; }
+
+        .bg-decor {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 8% -10%, rgba(120,177,69,0.28), transparent 42%),
+                radial-gradient(circle at 104% 10%, rgba(244,180,26,0.22), transparent 40%);
+            background-color: #F6F8F4;
+            z-index: -1;
+        }
+
+        .route-dash {
+            stroke-dasharray: 7 7;
+            animation: dashMove 2.4s linear infinite;
+        }
+        @keyframes dashMove { to { stroke-dashoffset: -140; } }
+
+        .pin-drop {
+            opacity: 0;
+            transform: translateY(-10px) scale(.6);
+            animation: pinDrop .5s cubic-bezier(.22,.85,.32,1) forwards;
+        }
+        @keyframes pinDrop { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* one orchestrated hero entrance, nothing else animates on load */
+        .hero-in {
+            opacity: 0;
+            transform: translateY(16px);
+            animation: heroIn .6s cubic-bezier(.22,.85,.32,1) forwards;
+        }
+
+        @keyframes heroIn { to { opacity: 1; transform: translateY(0); } }
+
+        .step-num {
+            font-variant-numeric: tabular-nums;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .route-dash, .pin-drop, .hero-in { animation: none !important; opacity: 1 !important; transform: none !important; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #C9D2C0; border-radius: 8px; }
+    </style>
 </head>
 
-<body>
-    <!-- Mode Toggle -->
-    <div class="mode-toggle">
-        <button class="mode-btn" onclick="switchToProfile()">
-            <i class="fas fa-store"></i>
-            <span>الصفحه الرئيسيه</span>
-        </button>
-        <button class="mode-btn active" onclick="switchToDashboard()">
-            <i class="fas fa-cog"></i>
-            <span>لوحة التحكم</span>
-        </button>
-    </div>
+<body class="bg-white text-ink font-cairo">
 
-    <!-- Dashboard Container -->
-    <div class="dashboard-container active" id="dashboardContainer">
-        <main class="main-content" id="mainContent">
-            <header class="topbar">
-                <nav class="topbar-menu">
-                    <a href="#" class="menu-item active" onclick="showDashboardSection('dashboard')">
-                        <i class="fas fa-tachometer-alt menu-icon"></i>
-                        <span class="menu-text">لوحة التحكم</span>
-                    </a>
-                    <a href="#" class="menu-item" onclick="showDashboardSection('menu')">
-                        <i class="fas fa-utensils menu-icon"></i>
-                        <span class="menu-text">القائمة</span>
-                    </a>
-                    <a href="#" class="menu-item" onclick="showDashboardSection('branches')">
-                        <i class="fas fa-map-marker-alt menu-icon"></i>
-                        <span class="menu-text">الفروع</span>
-                    </a>
-                    <a href="#" class="menu-item" onclick="showDashboardSection('offers')">
-                        <i class="fas fa-tag menu-icon"></i>
-                        <span class="menu-text">العروض</span>
-                    </a>
-                    <a href="#" class="menu-item" onclick="showDashboardSection('settings')">
-                        <i class="fas fa-cog menu-icon"></i>
-                        <span class="menu-text">الإعدادات</span>
-                    </a>
-                </nav>
-
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="ابحث عن أي شيء...">
-                </div>
-                <div class="topbar-actions">
-                    <button class="notification-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    <div class="user-menu">
-                        <div class="user-avatar">أ</div>
-                        <span>أحمد محمد</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Page Content -->
-            <div class="page-content">
-                <!-- Dashboard Section -->
-                <section id="dashboard-section" class="dashboard-section active">
-                    <div class="page-header">
-                        <h1 class="page-title">لوحة التحكم</h1>
-                        <p class="page-subtitle">نظرة عامة على أداء ال</p>
-                    </div>
-
-                    <!-- Stats Grid -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon primary">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                            <div class="stat-info">
-                                <div class="stat-value">1,234</div>
-                                <div class="stat-label">إجمالي الطلبات</div>
-                                <div class="stat-change positive">
-                                    <i class="fas fa-arrow-up"></i> 12% من الشهر الماضي
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon success">
-                                <i class="fas fa-dollar-sign"></i>
-                            </div>
-                            <div class="stat-info">
-                                <div class="stat-value">45,678</div>
-                                <div class="stat-label">الإيرادات (جنيه)</div>
-                                <div class="stat-change positive">
-                                    <i class="fas fa-arrow-up"></i> 8% من الشهر الماضي
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon warning">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="stat-info">
-                                <div class="stat-value">892</div>
-                                <div class="stat-label">العملاء النشطين</div>
-                                <div class="stat-change positive">
-                                    <i class="fas fa-arrow-up"></i> 23% من الشهر الماضي
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon danger">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="stat-info">
-                                <div class="stat-value">4.8</div>
-                                <div class="stat-label">متوسط التقييم</div>
-                                <div class="stat-change positive">
-                                    <i class="fas fa-arrow-up"></i> 0.3 من الشهر الماضي
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Menu Management Section -->
-                <section id="menu-section" class="dashboard-section">
-                    <div class="page-header">
-                        <h1 class="page-title">إدارة القائمة</h1>
-                        <p class="page-subtitle">إضافة وتعديل وحذف عناصر القائمة</p>
-                    </div>
-
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h3 class="card-title">قائمة ال</h3>
-                            <button class="btn btn-primary" onclick="openAddMenuItemModal()">
-                                <i class="fas fa-plus"></i>
-                                إضافة عنصر جديد
-                            </button>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>الاسم</th>
-                                        <th>الوصف</th>
-                                        <th>الفئة</th>
-                                        <th>السعر</th>
-                                        <th>الحالة</th>
-                                        <th>الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="menuTableBody">
-                                    <!-- Menu items will be populated by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Branches Management Section -->
-                <section id="branches-section" class="dashboard-section">
-                    <div class="page-header">
-                        <h1 class="page-title">إدارة الفروع</h1>
-                        <p class="page-subtitle">إدارة معلومات فروع ال</p>
-                    </div>
-
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h3 class="card-title">الفروع</h3>
-                            <button class="btn btn-primary" onclick="openAddBranchModal()">
-                                <i class="fas fa-plus"></i>
-                                إضافة فرع جديد
-                            </button>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>الاسم</th>
-                                        <th>العنوان</th>
-                                        <th>الهاتف</th>
-                                        <th>ساعات العمل</th>
-                                        <th>الحالة</th>
-                                        <th>الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="branchesTableBody">
-                                    <!-- Branches will be populated by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Offers Management Section -->
-                <section id="offers-section" class="dashboard-section">
-                    <div class="page-header">
-                        <h1 class="page-title">إدارة العروض</h1>
-                        <p class="page-subtitle">إنشاء وإدارة العروض والخصومات</p>
-                    </div>
-
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h3 class="card-title">العروض الحالية</h3>
-                            <button class="btn btn-primary" onclick="openAddOfferModal()">
-                                <i class="fas fa-plus"></i>
-                                إضافة عرض جديد
-                            </button>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>العنوان</th>
-                                        <th>الوصف</th>
-                                        <th>كود الخصم</th>
-                                        <th>نسبة الخصم</th>
-                                        <th>الحالة</th>
-                                        <th>الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="offersTableBody">
-                                    <!-- Offers will be populated by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Settings Section -->
-                <section id="settings-section" class="dashboard-section">
-                   
-                    
-                    <div class="page-header">
-                        <h1 class="page-title">الإعدادات</h1>
-                        <p class="page-subtitle">إدارة إعدادات التاجر</p>
-                    </div>
-
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h3 class="card-title">معلومات التاجر</h3>
-                        </div>
-                        <div class="modal-body">
-                            <form id="restaurantSettingsForm">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label class="form-label">اسم ال</label>
-                                        <input type="text" class="form-control" id="restaurantName"
-                                            value=" ( اسم التاجر )">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">البريد الإلكتروني</label>
-                                        <input type="email" class="form-control" id="restaurantEmail"
-                                            value="info@alzawagah.com">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label class="form-label">رقم الهاتف</label>
-                                        <input type="tel" class="form-control" id="restaurantPhone" value="920000123">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">ال WhatsApp</label>
-                                        <input type="tel" class="form-control" id="restaurantWhatsApp"
-                                            value="0501234567">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">العنوان</label>
-                                    <textarea class="form-control"
-                                        id="restaurantAddress">التجمع الخامس، حي النخيل، القاهره</textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">الوصف</label>
-                                    <textarea class="form-control"
-                                        id="restaurantDescription"> ( اسم التاجر )  وجهتك المفضلة لتجربة جديده في عالم التجاره</textarea>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary" onclick="saveRestaurantSettings()">
-                                <i class="fas fa-save"></i>
-                                حفظ الإعدادات
-                            </button>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </main>
-    </div>
-
-    <!-- Profile Container -->
-    <div class="profile-container" id="profileContainer">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-top" id="headerTop">
-                <i class="fas fa-truck"></i> توصيل مجاني للطلبات فوق 50 جنيه | <i class="fas fa-clock"></i> مفتوح الآن
-            </div>
-            <div class="header-main">
-                <div class="logo" id="logo">
-                    <span id="logoText"> ( اسم التاجر )</span>
-                </div>
-                <ul class="nav-tabs">
-                    <li class="nav-tab active" onclick="showSection('info')">
-                        <i class="fas fa-info-circle"></i>
-                        معلومات
-                    </li>
-                    <li class="nav-tab" onclick="showSection('menu')">
-                        <i class="fas fa-book-open"></i>
-                        المنتجات
-                    </li>
-                    <li class="nav-tab" onclick="showSection('branches')">
-                        <i class="fas fa-map-marker-alt"></i>
-                        الفروع
-                    </li>
-                    <li class="nav-tab" onclick="showSection('offers')">
-                        <i class="fas fa-tag"></i>
-                        العروض
-                    </li>
-                    <li class="nav-tab" onclick="showSection('contact')">
-                        <i class="fas fa-phone"></i>
-                        تواصل
-                    </li>
-                </ul>
-                <div class="cart-badge" onclick="openCart()">
-                    <i class="fas fa-shopping-cart"></i>
-                    السلة
-                    <span class="cart-count" id="cartCount">0</span>
-                </div>
-            </div>
-        </header>
-
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1 id="heroTitle"> ( اسم التاجر ) - تجربة فريدة</h1>
-                <p id="heroSubtitle">أشهى المأكولات الشرقية والغربية في جو عائلي دافئ</p>
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <div class="hero-stat-number" id="branchesCount">0+</div>
-                        <div class="hero-stat-label">فرع</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-number" id="menuItemsCount">0+</div>
-                        <div class="hero-stat-label">طبق</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-number">0+</div>
-                        <div class="hero-stat-label">عميل شهري</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-number">0.0</div>
-                        <div class="hero-stat-label">تقييم</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Main Container -->
-        <div class="container">
-            <!-- Restaurant Info Section -->
-            <section id="info" class="section active">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-store"></i>
-                        معلومات ال
-                    </h2>
-                </div>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3><i class="fas fa-info-circle"></i> نبذة عنا</h3>
-                        <p id="aboutDescription"> ( اسم التاجر ) هو وجهتك المفضلة لتجربة أشهى المأكولات. بدأنا رحلتنا
-                            عام 2010 ونحن نقدم لكم أفضل الأطباق بإشراف طهاة محترفين وبأجود المكونات.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fas fa-clock"></i> ساعات العمل</h3>
-                        <div class="info-item">
-                            <i class="fas fa-calendar-day"></i>
-                            <span>الأحد - الخميس: 11:00 ص - 12:00 م</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-calendar-week"></i>
-                            <span>الجمعة - السبت: 12:00 م - 1:00 ص</span>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fas fa-award"></i> الاعتمادات</h3>
-                        <div class="info-item">
-                            <i class="fas fa-certificate"></i>
-                            <span>شهادة الجودة ISO 9001</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-medal"></i>
-                            <span>أفضل 2023</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>معتمد من هيئة الغذاء</span>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fas fa-truck"></i> التوصيل</h3>
-                        <div class="info-item">
-                            <i class="fas fa-motorcycle"></i>
-                            <span>توصيل سريع خلال 30 دقيقة</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-dollar-sign"></i>
-                            <span>توصيل مجاني فوق 50 جنيه</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-map"></i>
-                            <span>نغطي جميع أنحاء المدينة</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Menu Section -->
-            <section id="menu" class="section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-book-open"></i>
-                        قائمتنا
-                    </h2>
-                </div>
-                <div class="menu-categories">
-                    <button class="category-btn active" onclick="filterMenu('all')">الكل</button>
-                    <button class="category-btn" onclick="filterMenu('category1')">فئه 1</button>
-                    <button class="category-btn" onclick="filterMenu('category2')">فئه 2</button>
-                    <button class="category-btn" onclick="filterMenu('category3')">فئه 3</button>
-                    <button class="category-btn" onclick="filterMenu('category4')">فئه 4</button>
-                </div>
-                <div class="menu-grid" id="menuGrid">
-                    <!-- Menu items will be populated by JavaScript -->
-                </div>
-            </section>
-
-            <!-- Branches Section -->
-            <section id="branches" class="section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-map-marker-alt"></i>
-                        فروعنا
-                    </h2>
-                </div>
-                <div class="branches-grid" id="branchesGrid">
-                    <!-- Branches will be populated by JavaScript -->
-                </div>
-            </section>
-
-            <!-- Offers Section -->
-            <section id="offers" class="section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-tag"></i>
-                        عروض خاصة
-                    </h2>
-                </div>
-                <div class="offers-grid" id="offersGrid">
-                    <!-- Offers will be populated by JavaScript -->
-                </div>
-            </section>
-
-            <!-- Contact Section -->
-            <section id="contact" class="section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-phone"></i>
-                        تواصل معنا
-                    </h2>
-                </div>
-                <div class="contact-grid">
-                    <div class="contact-item" onclick="makeCall()">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone-alt"></i>
-                        </div>
-                        <h3 class="contact-title">الهاتف</h3>
-                        <div class="contact-info" id="contactPhone">920000123</div>
-                        <div class="contact-info" id="contactMobile">0501234567</div>
-                        <a href="tel:920000123" class="contact-action">
-                            <i class="fas fa-phone"></i>
-                            اتصل الآن
-                        </a>
-                    </div>
-                    <div class="contact-item" onclick="sendEmail()">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <h3 class="contact-title">البريد الإلكتروني</h3>
-                        <div class="contact-info" id="contactEmail">info@alzawagah.com</div>
-                        <div class="contact-info" id="contactSupport">support@alzawagah.com</div>
-                        <a href="mailto:info@alzawagah.com" class="contact-action">
-                            <i class="fas fa-envelope"></i>
-                            أرسل رسالة
-                        </a>
-                    </div>
-                    <div class="contact-item" onclick="openWhatsApp()">
-                        <div class="contact-icon">
-                            <i class="fab fa-whatsapp"></i>
-                        </div>
-                        <h3 class="contact-title">واتساب</h3>
-                        <div class="contact-info" id="whatsappNumber">0501234567</div>
-                        <div class="contact-info">متواصل 24/7</div>
-                        <a href="https://wa.me/966501234567" class="contact-action" target="_blank">
-                            <i class="fab fa-whatsapp"></i>
-                            ابدأ محادثة
-                        </a>
-                    </div>
-                </div>
-            </section>
+    <!-- ===================== NAV ===================== -->
+    <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-lg border-b border-[#EAEFE3]">
+        <div class="max-w-6xl mx-auto px-6 h-[72px] flex items-center justify-between">
+            <a href="#" class="text-[20px] font-extrabold shrink-0">
+                <span class="word-one">Quick-</span> <span class="word-piace">One Piace</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-8 text-[14px] font-bold text-ink-soft">
+                <a href="#services" class="hover:text-ink transition-colors">خدماتنا</a>
+                <a href="#how" class="hover:text-ink transition-colors">إزاي بيشتغل</a>
+                <a href="#growth" class="hover:text-ink transition-colors">تطوير الأعمال</a>
+                <a href="#pricing" class="hover:text-ink transition-colors">الأسعار</a>
+                <a href="#contact" class="hover:text-ink transition-colors">تواصل معانا</a>
+            </nav>
+            <a href="#contact"
+                class="shrink-0 bg-primary text-white text-[13.5px] font-extrabold px-5 py-2.5 rounded-2xl shadow-[0_8px_18px_rgba(120,177,69,0.3)] active:scale-[0.97] transition-transform">
+                سجّل متجرك
+            </a>
         </div>
-    </div>
+    </header>
 
-    <!-- Add Menu Item Modal -->
-    <div class="modal" id="addMenuItemModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">إضافة عنصر جديد للقائمة</h3>
-                <button class="modal-close" onclick="closeModal('addMenuItemModal')">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- ===================== HERO ===================== -->
+    <section class="relative overflow-hidden">
+        <div class="bg-decor"></div>
+        <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid md:grid-cols-2 gap-14 items-center">
+
+            <div>
+                <p class="hero-in [animation-delay:.05s] m-0 mb-4 inline-flex items-center gap-2 text-[13px] font-extrabold text-primary-dark bg-primary-light px-3.5 py-1.5 rounded-full">
+                    منصة توصيل وتشغيل للتجار في القاهرة
+                </p>
+                <h1 class="hero-in [animation-delay:.15s] m-0 mb-5 text-[36px] md:text-[46px] leading-[1.18] font-extrabold">
+                    توصيل يوصل طلباتك بسرعة،<br class="hidden md:block"> ويكبّر بيزنسك خطوة خطوة
+                </h1>
+                <p class="hero-in [animation-delay:.25s] m-0 mb-8 text-[16px] leading-relaxed text-ink-soft max-w-md">
+                    من لحظة ما العميل يطلب، لحد ما السائق يوصله الباب، وتوصلك الفلوس — كل ده متزامن في مكان واحد،
+                    من غير ما تفتح عشر شاشات علشان تعرف الطلب فين.
+                </p>
+                <div class="hero-in [animation-delay:.35s] flex flex-wrap items-center gap-3">
+                    <a href="#contact"
+                        class="bg-primary text-white text-[14.5px] font-extrabold px-6 py-3.5 rounded-2xl shadow-[0_10px_22px_rgba(120,177,69,0.35)] active:scale-[0.98] transition-transform">
+                        سجّل متجرك دلوقتي
+                    </a>
+                    <a href="#how"
+                        class="text-[14.5px] font-extrabold text-ink px-6 py-3.5 rounded-2xl border-[1.5px] border-[#D8DED2] bg-white active:scale-[0.98] transition-transform">
+                        شوف إزاي بنشتغل
+                    </a>
+                </div>
+                <div class="hero-in [animation-delay:.45s] flex items-center gap-2 mt-7 text-[13px] font-bold text-ink-soft">
+                    <span>👋</span>
+                    <span>من الـ APP للباب — من غير ما تشيل هم اللوجستيات</span>
+                </div>
             </div>
-            <div class="modal-body">
-                <form id="addMenuItemForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">اسم العنصر</label>
-                            <input type="text" class="form-control" id="menuItemName" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">الفئة</label>
-                            <select class="form-control" id="menuItemCategory" required>
-                                <option value="">اختر الفئة</option>
-                                <option value="category1">فئه1</option>
-                                <option value="category2">فئه2</option>
-                                <option value="category3">فئه3</option>
-                                <option value="category4">فئه4</option>
-                            </select>
-                        </div>
+
+            <!-- map / delivery visual -->
+            <div class="hero-in [animation-delay:.3s] relative">
+                <div class="relative rounded-3xl bg-mapbg border border-[#DCE6D2] shadow-card overflow-hidden aspect-[5/4]">
+                    <svg viewBox="0 0 400 320" class="absolute inset-0 w-full h-full">
+                        <path d="M0 60 H400 M0 140 H400 M0 220 H400" stroke="#DCE6D2" stroke-width="1.5" />
+                        <path d="M90 0 V320 M230 0 V320 M330 0 V320" stroke="#DCE6D2" stroke-width="1.5" />
+                        <path d="M52 250 C 120 210, 150 90, 260 70 S 360 40, 350 45" fill="none" stroke="#78B145"
+                            stroke-width="4" stroke-linecap="round" class="route-dash" />
+                        <circle cx="52" cy="250" r="7" fill="#2C3E50" />
+                        <g class="pin-drop" style="animation-delay:.6s">
+                            <circle cx="350" cy="45" r="10" fill="#F4B41A" />
+                            <circle cx="350" cy="45" r="4" fill="white" />
+                        </g>
+                        <g class="pin-drop" style="animation-delay:.8s">
+                            <circle cx="180" cy="150" r="6" fill="#78B145" opacity=".85" />
+                        </g>
+                    </svg>
+                    <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md rounded-2xl px-4 py-3 shadow-soft">
+                        <p class="m-0 text-[11px] font-bold text-ink-soft">وقت التوصيل المتوقع</p>
+                        <p class="m-0 text-[18px] font-extrabold text-primary-dark">٢٢ دقيقة</p>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">السعر (جنيه)</label>
-                            <input type="number" class="form-control" id="menuItemPrice" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">الحالة</label>
-                            <select class="form-control" id="menuItemStatus">
-                                <option value="active">نشط</option>
-                                <option value="inactive">غير نشط</option>
-                            </select>
-                        </div>
+                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md rounded-2xl px-4 py-2.5 shadow-soft">
+                        <p class="m-0 text-[11px] font-bold text-ink-soft">قيمة الطلب</p>
+                        <p class="m-0 text-[15px] font-extrabold">١٤٥ ج.م</p>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">الوصف</label>
-                        <textarea class="form-control" id="menuItemDescription" required></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('addMenuItemModal')">إلغاء</button>
-                <button class="btn btn-primary" onclick="addMenuItem()">
-                    <i class="fas fa-plus"></i>
-                    إضافة العنصر
-                </button>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Add Branch Modal -->
-    <div class="modal" id="addBranchModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">إضافة فرع جديد</h3>
-                <button class="modal-close" onclick="closeModal('addBranchModal')">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- ===================== STATS ===================== -->
+    <section class="border-y border-[#EAEFE3] bg-white">
+        <div class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <p class="m-0 text-[30px] font-extrabold text-accent-dark">٢٢ دقيقة</p>
+                <p class="m-0 mt-1 text-[12.5px] font-bold text-ink-soft">متوسط وقت التوصيل جوه القاهرة</p>
             </div>
-            <div class="modal-body">
-                <form id="addBranchForm">
-                    <div class="form-group">
-                        <label class="form-label">اسم الفرع</label>
-                        <input type="text" class="form-control" id="branchName" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">العنوان</label>
-                        <input type="text" class="form-control" id="branchAddress" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">الهاتف</label>
-                            <input type="tel" class="form-control" id="branchPhone" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">البريد الإلكتروني</label>
-                            <input type="email" class="form-control" id="branchEmail">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">ساعات العمل</label>
-                        <input type="text" class="form-control" id="branchHours" placeholder="مثال: 11:00 ص - 12:00 م"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">الحالة</label>
-                        <select class="form-control" id="branchStatus">
-                            <option value="active">نشط</option>
-                            <option value="inactive">غير نشط</option>
-                        </select>
-                    </div>
-                </form>
+            <div>
+                <p class="m-0 text-[30px] font-extrabold text-accent-dark">٤٠+</p>
+                <p class="m-0 mt-1 text-[12.5px] font-bold text-ink-soft">منطقة تغطية</p>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('addBranchModal')">إلغاء</button>
-                <button class="btn btn-primary" onclick="addBranch()">
-                    <i class="fas fa-plus"></i>
-                    إضافة الفرع
-                </button>
+            <div>
+                <p class="m-0 text-[30px] font-extrabold text-accent-dark">٩٨٪</p>
+                <p class="m-0 mt-1 text-[12.5px] font-bold text-ink-soft">طلبات وصلت في ميعادها</p>
+            </div>
+            <div>
+                <p class="m-0 text-[30px] font-extrabold text-accent-dark">١٢٠٠+</p>
+                <p class="m-0 mt-1 text-[12.5px] font-bold text-ink-soft">تاجر ومطعم بيشتغلوا معانا</p>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Add Offer Modal -->
-    <div class="modal" id="addOfferModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">إضافة عرض جديد</h3>
-                <button class="modal-close" onclick="closeModal('addOfferModal')">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- ===================== SERVICES ===================== -->
+    <section id="services" class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+        <div class="max-w-lg mb-12">
+            <h2 class="m-0 mb-3 text-[28px] md:text-[32px] font-extrabold leading-tight">كل اللي محتاجه علشان تشغيل
+                التوصيل يبقى أسهل</h2>
+            <p class="m-0 text-[15px] leading-relaxed text-ink-soft">من استلام الطلب لحد التحصيل، بنغطي كل خطوة
+                من رحلة التوصيل، ومصممين خصيصًا لطريقة شغل التجار والمطاعم في مصر.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-5">
+            <div class="md:col-span-2 rounded-3xl bg-mapbg border border-[#DCE6D2] p-8 md:p-10 flex flex-col justify-between min-h-[280px]">
+                <div>
+                    <p class="m-0 mb-4 text-[13px] font-extrabold text-primary-dark">للسائقين والتوصيل</p>
+                    <h3 class="m-0 mb-3 text-[22px] font-extrabold">لوحة تحكم Quick لمتابعة السائقين لحظة بلحظة</h3>
+                    <p class="m-0 text-[14.5px] leading-relaxed text-ink-soft max-w-md">خريطة حية بمواقع السائقين،
+                        توزيع أوتوماتيكي للطلبات على أقرب سائق متاح، وتحديث فوري لحالة كل طلب من "جاري التجهيز"
+                        لحد "تم التسليم".</p>
+                </div>
+                <a href="#contact" class="mt-8 inline-flex items-center gap-1.5 text-[13.5px] font-extrabold text-primary-dark">
+                    اعرف تفاصيل أكتر
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+                </a>
             </div>
-            <div class="modal-body">
-                <form id="addOfferForm">
-                    <div class="form-group">
-                        <label class="form-label">عنوان العرض</label>
-                        <input type="text" class="form-control" id="offerTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">وصف العرض</label>
-                        <textarea class="form-control" id="offerDescription" required></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">كود الخصم</label>
-                            <input type="text" class="form-control" id="offerCode" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">نسبة الخصم (%)</label>
-                            <input type="number" class="form-control" id="offerDiscount" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">الحالة</label>
-                        <select class="form-control" id="offerStatus">
-                            <option value="active">نشط</option>
-                            <option value="inactive">غير نشط</option>
-                        </select>
-                    </div>
-                </form>
+
+            <div class="rounded-3xl bg-white border-[1.5px] border-[#EAEFE3] p-8 flex flex-col justify-between">
+                <div>
+                    <p class="m-0 mb-4 text-[13px] font-extrabold text-accent-dark">لمتابعة الطلبات</p>
+                    <h3 class="m-0 mb-3 text-[19px] font-extrabold">شيت متابعة متزامن أول بأول</h3>
+                    <p class="m-0 text-[14px] leading-relaxed text-ink-soft">كل طلب بييجي بيتسجل ويتحدّث حاله تلقائي،
+                        من غير نسخ ولزق بين الشاشات.</p>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('addOfferModal')">إلغاء</button>
-                <button class="btn btn-primary" onclick="addOffer()">
-                    <i class="fas fa-plus"></i>
-                    إضافة العرض
-                </button>
+
+            <div class="rounded-3xl bg-white border-[1.5px] border-[#EAEFE3] p-8 flex flex-col justify-between">
+                <div>
+                    <p class="m-0 mb-4 text-[13px] font-extrabold text-accent-dark">للتحصيل</p>
+                    <h3 class="m-0 mb-3 text-[19px] font-extrabold">تحصيل كاش وتحويلات</h3>
+                    <p class="m-0 text-[14px] leading-relaxed text-ink-soft">فلوسك بترجعلك أول بأول، مع تقرير يومي
+                        بالمبيعات بالجنيه المصري.</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 rounded-3xl bg-white border-[1.5px] border-[#EAEFE3] p-8 md:p-10 flex flex-col justify-between">
+                <div>
+                    <p class="m-0 mb-4 text-[13px] font-extrabold text-accent-dark">للعملاء</p>
+                    <h3 class="m-0 mb-3 text-[22px] font-extrabold">تجربة طلب بسيطة من الموبايل للباب</h3>
+                    <p class="m-0 text-[14.5px] leading-relaxed text-ink-soft max-w-md">تسجيل دخول سريع، تتبع الطلب
+                        على الخريطة، وتقييم بعد كل توصيلة — عشان عميلك يرجع يطلب تاني.</p>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Floating Action Button -->
-    <div class="fab" onclick="openCart()">
-        <i class="fas fa-shopping-cart"></i>
-    </div>
+    <!-- ===================== HOW IT WORKS ===================== -->
+    <section id="how" class="bg-ink text-white">
+        <div class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+            <div class="max-w-lg mb-14">
+                <h2 class="m-0 mb-3 text-[28px] md:text-[32px] font-extrabold">إزاي بتبدأ تشتغل معانا</h2>
+                <p class="m-0 text-[15px] leading-relaxed text-white/70">أربع خطوات، ومتجرك يبقى شغّال على المنصة.</p>
+            </div>
 
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle notification-icon"></i>
-        <span id="notificationText">تمت الإضافة بنجاح!</span>
-    </div>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="border-t-2 border-white/20 pt-6">
+                    <p class="step-num m-0 mb-4 text-[13px] font-extrabold text-accent">01</p>
+                    <h3 class="m-0 mb-2 text-[16.5px] font-extrabold">تسجيل المتجر</h3>
+                    <p class="m-0 text-[13.5px] leading-relaxed text-white/70">ابعتلنا بيانات متجرك، وهيتم تفعيل
+                        الحساب خلال يوم عمل.</p>
+                </div>
+                <div class="border-t-2 border-white/20 pt-6">
+                    <p class="step-num m-0 mb-4 text-[13px] font-extrabold text-accent">02</p>
+                    <h3 class="m-0 mb-2 text-[16.5px] font-extrabold">ربط الطلبات</h3>
+                    <p class="m-0 text-[13.5px] leading-relaxed text-white/70">اربط الأوردرات من شيت المتابعة، أو
+                        دخّلها يدوي في دقيقة واحدة.</p>
+                </div>
+                <div class="border-t-2 border-white/20 pt-6">
+                    <p class="step-num m-0 mb-4 text-[13px] font-extrabold text-accent">03</p>
+                    <h3 class="m-0 mb-2 text-[16.5px] font-extrabold">تعيين سائق</h3>
+                    <p class="m-0 text-[13.5px] leading-relaxed text-white/70">النظام بيوزّع الطلب على أقرب سائق
+                        متاح تلقائيًا.</p>
+                </div>
+                <div class="border-t-2 border-white/20 pt-6">
+                    <p class="step-num m-0 mb-4 text-[13px] font-extrabold text-accent">04</p>
+                    <h3 class="m-0 mb-2 text-[16.5px] font-extrabold">التسليم والتحصيل</h3>
+                    <p class="m-0 text-[13.5px] leading-relaxed text-white/70">العميل بياخد طلبه، والفلوس بترجعلك
+                        أول بأول.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script src="landing.js"></script>
+    <!-- ===================== GROWTH / BUSINESS ===================== -->
+    <section id="growth" class="max-w-6xl mx-auto px-6 py-20 md:py-28 grid md:grid-cols-2 gap-14 items-center">
+        <div class="order-2 md:order-1 rounded-3xl bg-mapbg border border-[#DCE6D2] p-6 shadow-card">
+            <p class="m-0 mb-5 text-[13px] font-extrabold text-ink-soft">تقرير الأداء — الأسبوع ده</p>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between text-[12.5px] font-bold text-ink-soft mb-1.5">
+                        <span>المهندسين</span><span>٣١٢ طلب</span>
+                    </div>
+                    <div class="h-2.5 rounded-full bg-white overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:86%"></div></div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-[12.5px] font-bold text-ink-soft mb-1.5">
+                        <span>مدينة نصر</span><span>٢٤٠ طلب</span>
+                    </div>
+                    <div class="h-2.5 rounded-full bg-white overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:66%"></div></div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-[12.5px] font-bold text-ink-soft mb-1.5">
+                        <span>المعادي</span><span>١٨٥ طلب</span>
+                    </div>
+                    <div class="h-2.5 rounded-full bg-white overflow-hidden"><div class="h-full bg-accent rounded-full" style="width:50%"></div></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-6">
+                <div class="bg-white rounded-2xl p-4">
+                    <p class="m-0 text-[11.5px] font-bold text-ink-soft">أوقات الذروة</p>
+                    <p class="m-0 mt-1 text-[16px] font-extrabold">٧–٩ مساءً</p>
+                </div>
+                <div class="bg-white rounded-2xl p-4">
+                    <p class="m-0 text-[11.5px] font-bold text-ink-soft">مبيعات الأسبوع</p>
+                    <p class="m-0 mt-1 text-[16px] font-extrabold">٤٨,٦٠٠ ج.م</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-1 md:order-2">
+            <h2 class="m-0 mb-4 text-[28px] md:text-[32px] font-extrabold leading-tight">بيانات تساعدك تاخد قرار،
+                مش بس أرقام</h2>
+            <p class="m-0 mb-6 text-[15px] leading-relaxed text-ink-soft max-w-md">اعرف أكتر المنتجات مبيعًا،
+                أوقات الذروة عند عملاءك، وأداء كل منطقة على حدة — وابني على أساسها عروضك القادمة بدل ما تخمّن.</p>
+            <ul class="space-y-3 text-[14.5px] font-semibold text-ink">
+                <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span> تقرير يومي وأسبوعي بالمبيعات والطلبات</li>
+                <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span> مقارنة أداء الفروع والمناطق</li>
+                <li class="flex items-center gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span> تنبيهات لحظية لأي تأخير في التوصيل</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ===================== PRICING ===================== -->
+    <section id="pricing" class="bg-mapbg border-y border-[#DCE6D2]">
+        <div class="max-w-5xl mx-auto px-6 py-20 md:py-28">
+            <div class="max-w-lg mb-14">
+                <h2 class="m-0 mb-3 text-[28px] md:text-[32px] font-extrabold">أسعار واضحة، من غير رسوم مخفية</h2>
+                <p class="m-0 text-[15px] leading-relaxed text-ink-soft">اختار الخطة اللي تناسب حجم طلباتك، وابدأ
+                    من غير التزام سنوي.</p>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-[#DCE6D2] overflow-hidden shadow-soft">
+                <div class="grid grid-cols-4 text-[13.5px] font-extrabold">
+                    <div class="p-5 md:p-6"></div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3]">أساسي</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3] bg-primary-light relative">
+                        بيزنس
+                        <span class="block text-[10.5px] font-bold text-primary-dark mt-0.5">الأكتر اختيارًا</span>
+                    </div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3]">إنتربرايز</div>
+                </div>
+
+                <div class="grid grid-cols-4 text-[13.5px] border-t border-[#EAEFE3]">
+                    <div class="p-5 md:p-6 font-bold text-ink-soft">سعر الطلبية</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3] font-extrabold">١٢ ج.م</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3] font-extrabold bg-primary-light/40">٩ ج.م</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3] font-extrabold">حسب الاتفاق</div>
+                </div>
+                <div class="grid grid-cols-4 text-[13.5px] border-t border-[#EAEFE3]">
+                    <div class="p-5 md:p-6 font-bold text-ink-soft">عدد السائقين المخصصين</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3]">حسب الطلب</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3] bg-primary-light/40">حتى ٥</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3]">غير محدود</div>
+                </div>
+                <div class="grid grid-cols-4 text-[13.5px] border-t border-[#EAEFE3]">
+                    <div class="p-5 md:p-6 font-bold text-ink-soft">تقارير الأداء</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3] text-ink-soft">أسبوعي</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3] bg-primary-light/40">يومي</div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3]">لحظي + API</div>
+                </div>
+                <div class="grid grid-cols-4 text-[13.5px] border-t border-[#EAEFE3]">
+                    <div class="p-5 md:p-6"></div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3]">
+                        <a href="#contact" class="inline-block text-[12.5px] font-extrabold text-ink px-4 py-2 rounded-xl border-[1.5px] border-[#D8DED2]">ابدأ</a>
+                    </div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3] bg-primary-light/40">
+                        <a href="#contact" class="inline-block text-[12.5px] font-extrabold text-white px-4 py-2 rounded-xl bg-primary">ابدأ</a>
+                    </div>
+                    <div class="p-5 md:p-6 text-center border-r border-[#EAEFE3]">
+                        <a href="#contact" class="inline-block text-[12.5px] font-extrabold text-ink px-4 py-2 rounded-xl border-[1.5px] border-[#D8DED2]">تواصل معانا</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== TESTIMONIAL ===================== -->
+    <section class="max-w-4xl mx-auto px-6 py-20 md:py-28 text-center">
+        <p class="m-0 mb-8 text-[20px] md:text-[24px] leading-relaxed font-bold">
+            "من ساعة ما بدأنا نشتغل مع Quick-One Piace وقت التوصيل قل بشكل واضح، والعملاء بقوا يرجعوا يطلبوا تاني
+            لأنهم عارفين طلبهم هيوصل في ميعاده."
+        </p>
+        <div class="flex items-center justify-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-primary-light flex items-center justify-center text-[18px]">🍽️</div>
+            <div class="text-right">
+                <p class="m-0 text-[13.5px] font-extrabold">محمد سامي</p>
+                <p class="m-0 text-[12px] font-bold text-ink-soft">صاحب مطعم في المهندسين</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== CTA ===================== -->
+    <section id="contact" class="bg-primary">
+        <div class="max-w-3xl mx-auto px-6 py-20 text-center text-white">
+            <h2 class="m-0 mb-4 text-[28px] md:text-[34px] font-extrabold">جاهز تكبّر بيزنسك؟</h2>
+            <p class="m-0 mb-8 text-[15px] leading-relaxed text-white/85 max-w-md mx-auto">اترك رقم متجرك، وفريقنا
+                هيتواصل معاك خلال يوم عمل علشان يجهزلك الحساب.</p>
+            <form class="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto" onsubmit="event.preventDefault(); this.querySelector('button').textContent='تم الإرسال 🎉';">
+                <input type="tel" required placeholder="رقم موبايل المتجر"
+                    class="flex-1 px-4 py-3.5 rounded-2xl text-sm font-semibold text-ink outline-none">
+                <button type="submit"
+                    class="bg-ink text-white text-[14px] font-extrabold px-6 py-3.5 rounded-2xl active:scale-[0.98] transition-transform">
+                    احجز عرض تجريبي
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="bg-white">
+        <div class="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            <a href="#" class="text-[17px] font-extrabold">
+                <span class="word-one">Quick-</span> <span class="word-piace">One Piace</span>
+            </a>
+            <nav class="flex flex-wrap items-center justify-center gap-6 text-[13px] font-bold text-ink-soft">
+                <a href="#services" class="hover:text-ink transition-colors">خدماتنا</a>
+                <a href="#how" class="hover:text-ink transition-colors">إزاي بيشتغل</a>
+                <a href="#pricing" class="hover:text-ink transition-colors">الأسعار</a>
+                <a href="#contact" class="hover:text-ink transition-colors">تواصل معانا</a>
+            </nav>
+            <p class="m-0 text-[12px] font-bold text-ink-soft">© 2026 Quick-One Piace</p>
+        </div>
+    </footer>
+
 </body>
 
 </html>
